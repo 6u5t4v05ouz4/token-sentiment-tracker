@@ -86,18 +86,18 @@ TOKEN_ID_MAP = {
     "atom": "cosmos",
 }
 
-# News sources for sentiment analysis - using multiple sources for redundancy
+# News sources for sentiment analysis - using reliable sources only
 NEWS_SOURCES = [
-    # Primary sources - reliable alternatives
+    # Primary news sources
+    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h",
+    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=volume_desc&per_page=100&page=1&sparkline=false&price_change_percentage=24h",
+    
+    # News and updates
     "https://api.coingecko.com/api/v3/news",
     "https://api.coingecko.com/api/v3/status_updates",
-
-    # Alternative news sources
-    "https://min-api.cryptocompare.com/data/v2/news/?lang=EN",
-
-    # Additional CoinGecko endpoints
-    "https://api.coingecko.com/api/v3/global",
-    "https://api.coingecko.com/api/v3/exchanges"
+    
+    # Alternative news source
+    "https://min-api.cryptocompare.com/data/v2/news/?lang=EN"
 ]
 
 # Price and market data sources for analysis
@@ -156,47 +156,86 @@ def extract_token_from_query(query: str) -> Optional[str]:
     return None
 
 async def get_crypto_price(token_symbol: str):
-    """Get cryptocurrency price data from CoinGecko API"""
+    """Get cryptocurrency price data from CoinGecko API with improved error handling"""
     # Map symbol to CoinGecko ID
     token_id = TOKEN_ID_MAP.get(token_symbol.lower(), token_symbol.lower())
+    
+    # Default values in case of errors
+    default_data = {
+        "symbol": token_symbol.upper(),
+        "name": token_symbol.upper(),
+        "price_usd": 0.0,
+        "market_cap": 0.0,
+        "volume_24h": 0.0,
+        "change_24h": 0.0,
+        "price_change_7d": 0.0,
+        "price_change_30d": 0.0,
+        "last_updated": int(time.time())
+    }
 
     try:
         # Build API URL
         url = f"https://api.coingecko.com/api/v3/coins/{token_id}"
+        params = {}
         if COINGECKO_API_KEY:
-            url += f"?x_cg_api_key={COINGECKO_API_KEY}"
+            params['x_cg_api_key'] = COINGECKO_API_KEY
 
-        # Make the request
-        response = requests.get(url, timeout=10)
-
-        if response.status_code == 200:
+        # Make the request with timeout
+        response = requests.get(url, params=params, timeout=15)
+        response.raise_for_status()  # Raises an HTTPError for bad responses
+        
+        # Try to parse JSON response
+        try:
             data = response.json()
+        except ValueError as e:
+            logger.error(f"Failed to parse JSON response: {str(e)}")
+            return {"error": "Invalid JSON response from API", **default_data}
 
-            # Extract relevant data
-            current_price = data['market_data']['current_price']['usd']
-            market_cap = data['market_data']['market_cap']['usd']
-            volume = data['market_data']['total_volume']['usd']
-            price_change_24h = data['market_data']['price_change_percentage_24h'] or 0
-            price_change_7d = data['market_data']['price_change_percentage_7d'] or 0
-            price_change_30d = data['market_data']['price_change_percentage_30d'] or 0
-            last_updated_timestamp = int(datetime.fromisoformat(data['last_updated'].replace('Z', '+00:00')).timestamp())
+        # Check if we have the expected data structure
+        if not isinstance(data, dict) or 'market_data' not in data:
+            logger.error(f"Unexpected API response structure: {data}")
+            return {"error": "Unexpected API response structure", **default_data}
 
-            # Return structured data
-            return {
-                "symbol": token_symbol.upper(),
-                "name": data['name'],
-                "price_usd": current_price,
-                "market_cap": market_cap,
-                "volume_24h": volume,
-                "change_24h": price_change_24h,
-                "price_change_7d": price_change_7d,
-                "price_change_30d": price_change_30d,
-                "last_updated": last_updated_timestamp
-            }
-        else:
-            return {"error": f"API error: {response.status_code}"}
+        # Safely extract data with defaults
+        market_data = data.get('market_data', {})
+        current_price = market_data.get('current_price', {}).get('usd', 0.0)
+        market_cap = market_data.get('market_cap', {}).get('usd', 0.0)
+        volume = market_data.get('total_volume', {}).get('usd', 0.0)
+        
+        # Handle potential None values for percentage changes
+        price_change_24h = market_data.get('price_change_percentage_24h', 0.0) or 0.0
+        price_change_7d = market_data.get('price_change_percentage_7d_in_currency', {}).get('usd', 0.0) or 0.0
+        price_change_30d = market_data.get('price_change_percentage_30d_in_currency', {}).get('usd', 0.0) or 0.0
+        
+        # Safely parse last_updated timestamp
+        last_updated = data.get('last_updated', '')
+        try:
+            if last_updated:
+                last_updated_timestamp = int(datetime.fromisoformat(last_updated.replace('Z', '+00:00')).timestamp())
+            else:
+                last_updated_timestamp = int(time.time())
+        except (ValueError, AttributeError):
+            last_updated_timestamp = int(time.time())
+
+        # Return structured data with fallbacks
+        return {
+            "symbol": data.get('symbol', token_symbol).upper(),
+            "name": data.get('name', token_symbol.upper()),
+            "price_usd": float(current_price) if current_price is not None else 0.0,
+            "market_cap": float(market_cap) if market_cap is not None else 0.0,
+            "volume_24h": float(volume) if volume is not None else 0.0,
+            "change_24h": float(price_change_24h) if price_change_24h is not None else 0.0,
+            "price_change_7d": float(price_change_7d) if price_change_7d is not None else 0.0,
+            "price_change_30d": float(price_change_30d) if price_change_30d is not None else 0.0,
+            "last_updated": last_updated_timestamp
+        }
+        
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Request error: {str(e)}")
+        return {"error": f"Network error: {str(e)}", **default_data}
     except Exception as e:
-        return {"error": f"Error fetching price data: {str(e)}"}
+        logger.error(f"Unexpected error: {str(e)}")
+        return {"error": f"Error fetching price data: {str(e)}", **default_data}
 
 async def analyze_sentiment(token_symbol: str):
     """Analyze sentiment for a cryptocurrency from news and social media"""
@@ -419,28 +458,57 @@ async def analyze_sentiment(token_symbol: str):
 
         # Analyze sentiment in all collected texts
         if texts:
-            compound_scores = []
-            for text in texts:
-                scores = sia.polarity_scores(text)
-                compound_scores.append(scores['compound'])
-
-            # Calculate average sentiment score
-            avg_score = sum(compound_scores) / len(compound_scores)
-
-            # Determine sentiment category
-            if avg_score >= 0.05:
-                category = "bullish"
-            elif avg_score <= -0.05:
-                category = "bearish"
-            else:
-                category = "neutral"
-
-            return {
-                "sentiment_score": avg_score,
-                "sentiment_category": category,
-                "sample_size": len(texts),
-                "sources": sources
+            sentiment_result = {
+                'sentiment_score': 0.0,
+                'sentiment_category': 'neutral',
+                'sample_size': 0,
+                'sources': [],
+                'analysis': 'No recent news or data available for analysis.'
             }
+            
+            try:
+                if texts and len(texts) > 0:
+                    # Calculate sentiment scores with error handling for each text
+                    scores = []
+                    for text in texts:
+                        try:
+                            if text and isinstance(text, str) and len(text.strip()) > 0:
+                                score = sia.polarity_scores(text)['compound']
+                                scores.append(score)
+                        except Exception as e:
+                            logger.warning(f"Error analyzing sentiment for text: {str(e)}")
+                            continue
+                    
+                    if scores:  # Only proceed if we have valid scores
+                        avg_score = sum(scores) / len(scores)
+                        
+                        # Categorize sentiment with more granular thresholds
+                        if avg_score >= 0.15:
+                            sentiment = 'very positive'
+                        elif avg_score >= 0.05:
+                            sentiment = 'positive'
+                        elif avg_score <= -0.15:
+                            sentiment = 'very negative'
+                        elif avg_score <= -0.05:
+                            sentiment = 'negative'
+                        else:
+                            sentiment = 'neutral'
+                        
+                        # Update result with analysis
+                        sentiment_result.update({
+                            'sentiment_score': float(avg_score),
+                            'sentiment_category': sentiment,
+                            'sample_size': len(scores),
+                            'sources': sources[:5],  # Limit to top 5 sources
+                            'analysis': ' '.join(text[:100] + '...' for text in texts[:3])  # Include preview of first 3 texts
+                        })
+                
+                return sentiment_result
+                
+            except Exception as e:
+                logger.error(f"Error in sentiment analysis: {str(e)}")
+                sentiment_result['error'] = f"Error in sentiment analysis: {str(e)}"
+                return sentiment_result
         else:
             return {
                 "sentiment_score": 0,

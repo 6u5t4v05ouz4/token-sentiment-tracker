@@ -145,7 +145,7 @@ graph TD
     B --> C[Fetch Price Data]
     B --> D[Gather News & Social Data]
     D --> E[Sentiment Analysis]
-    C --> F[AI Analysis]
+    C --> F[LLM ASI 1-mini AI Analysis]
     E --> F
     F --> G[Generate Response]
     G --> H[Return Analysis]
@@ -190,6 +190,14 @@ python agent.py
 ```
 
 Upon startup, the agent will display its address. This address is needed to interact with the agent on Agentverse.
+
+## Contact
+
+For any questions or inquiries, feel free to reach out:
+
+- **Email**: [gustavo.asouza@live.com](mailto:gustavo.asouza@live.com)
+- **WhatsApp**: [+55 12 99637-3190](https://wa.me/5512996373190)
+- **Twitter**: [@0x6u5t4v05ouz4](https://twitter.com/0x6u5t4v05ouz4)
 
 ### Interacting with the Agent on Agentverse
 
