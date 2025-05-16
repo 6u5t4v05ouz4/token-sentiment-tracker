@@ -191,14 +191,6 @@ python agent.py
 
 Upon startup, the agent will display its address. This address is needed to interact with the agent on Agentverse.
 
-## Contact
-
-For any questions or inquiries, feel free to reach out:
-
-- **Email**: [gustavo.asouza@live.com](mailto:gustavo.asouza@live.com)
-- **WhatsApp**: [+55 12 99637-3190](https://wa.me/5512996373190)
-- **Twitter**: [@0x6u5t4v05ouz4](https://twitter.com/0x6u5t4v05ouz4)
-
 ### Interacting with the Agent on Agentverse
 
 1.  Ensure your agent is running locally.
@@ -289,4 +281,16 @@ This project is licensed under the MIT License. See the `LICENSE` file for detai
 ## Disclaimer
 
 This agent provides information for educational and informational purposes only. The analysis should not be considered financial advice. Always conduct your own research (DYOR) before making any investment decisions.
+
+
+## Contact
+
+For any questions or inquiries, feel free to reach out:
+
+- **Email**: [gustavo.asouza@live.com](mailto:gustavo.asouza@live.com)
+- **WhatsApp**: [+55 12 99637-3190](https://wa.me/5512996373190)
+- **Twitter**: [@0x6u5t4v05ouz4](https://twitter.com/0x6u5t4v05ouz4)
+
+
 ```
+
