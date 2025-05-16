@@ -1,59 +1,187 @@
+<<<<<<< HEAD
 ```markdown
 # Token Sentiment & Price Tracker
 
 (https://chat.agentverse.ai)
+=======
+<div align="center">
 
-This is a `uagents` agent designed to provide real-time price data and sentiment analysis for cryptocurrencies. It fetches market data from CoinGecko, performs sentiment analysis on news and other textual data using NLTK/VADER, and can leverage the ASI LLM (`asi1-mini` model) for more advanced, contextual analysis. If the LLM is unavailable, a rule-based fallback analysis is provided. The agent communicates using the official `uagents` chat protocol.
+# Token Sentiment & Price Tracker
 
-## Core Features
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
+![uAgents](https://img.shields.io/badge/uAgents-0.6.0+-orange.svg)
+[![Chat on Agentverse](https://img.shields.io/badge/Chat%20on-Agentverse-8A2BE2)](https://chat.agentverse.ai)
+>>>>>>> 2cb0b9c (Update  README)
 
--   **Real-time Price Data:** Fetches current price, market cap, trading volume, and price changes from CoinGecko.
--   **Sentiment Analysis:** Utilizes NLTK/VADER to analyze sentiment from news (CoinGecko, CryptoCompare) and other market-related texts.
--   **Advanced LLM Analysis:** Integrates with ASI LLM (`asi1-mini`) for nuanced market outlooks when an API key is provided.
--   **Fallback System:** Provides a robust rule-based analysis if the ASI LLM is unavailable or encounters issues.
--   **Natural Language Token Extraction:** Intelligently extracts cryptocurrency symbols (e.g., BTC, ETH) from user queries.
--   **Agentverse Integration:** Uses the official `chat_protocol_spec` for seamless interaction on Agentverse and with other agents.
--   **Multiple Data Sources:** Gathers information from various CoinGecko endpoints and CryptoCompare for comprehensive analysis.
--   **Error Handling:** Includes robust error handling for API calls and other potential failures.
+**Real-time cryptocurrency analysis with sentiment intelligence**
 
-## Installation
+</div>
 
-1.  Clone the repository (if you haven't already).
-2.  Install the required dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-    Ensure your `requirements.txt` file includes:
-    ```
-    uagents
-    python-dotenv
-    nltk
-    requests
-    ```
+## Overview
+
+A powerful `uagents`-based agent that provides real-time cryptocurrency market analysis by combining price data from CoinGecko with sentiment analysis from multiple sources. The agent offers both AI-powered insights (using ASI LLM) and rule-based fallback analysis.
+
+<div align="center">
+  <img src="https://img.icons8.com/color/96/000000/bitcoin--v1.png" width="60" />
+  <img src="https://img.icons8.com/color/96/000000/ethereum.png" width="60" />
+  <img src="https://img.icons8.com/color/96/000000/ripple.png" width="60" />
+  <img src="https://img.icons8.com/color/96/000000/litecoin.png" width="60" />
+  <img src="https://img.icons8.com/color/96/000000/solana.png" width="60" />
+</div>
+
+## Features
+
+- **Real-time Market Data**
+  - Price tracking with 24h, 7d, and 30d trends
+  - Market cap and trading volume analysis
+  - Multiple cryptocurrency support
+
+- **Sentiment Analysis**
+  - News aggregation from top crypto sources
+  - Social media sentiment scoring
+  - VADER-based sentiment classification
+
+- **AI-Powered Insights**
+  - ASI LLM integration for contextual analysis
+  - Fallback to rule-based analysis when needed
+  - Natural language processing of queries
+
+- **Agentverse Integration**
+  - Seamless chat interface
+  - Easy deployment and interaction
+  - Multi-agent communication ready
+
+## Quick Start
+
+### Prerequisites
+- Python 3.8+
+- pip (Python package manager)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/6u5t4v05ouz4/token-sentiment-tracker.git
+   cd token-sentiment-tracker
+   ```
+
+2. **Set up a virtual environment** (recommended)
+   ```bash
+   # Windows
+   python -m venv venv
+   .\venv\Scripts\activate
+   
+   # macOS/Linux
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
+
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure environment variables**
+   ```bash
+   cp .env.example .env
+   ```
+   Edit the `.env` file with your API keys.
 
 ## Configuration
 
-### Environment Variables
-
-Create a `.env` file in the root directory of the project with the following variables:
+Create a `.env` file with the following variables:
 
 ```env
-# (Optional but Recommended) Agent seed for a consistent agent address
-# AGENT_SEED=your_secret_seed_phrase_here
+# Required for advanced analysis
+ASI_LLM_KEY=your_asi_llm_api_key
 
-# (Required for Advanced LLM Analysis) API Key for ASI LLM
-ASI_LLM_KEY=your_asi_llm_api_key_here
+# Optional (recommended for production)
+COINGECKO_API_KEY=your_coingecko_api_key
 
-# (Optional) API Key for CoinGecko to avoid rate limits
-COINGECKO_API_KEY=your_coingecko_api_key_here
+# Optional: For consistent agent address
+AGENT_SEED=your_secret_seed_phrase
 ```
 
-### Obtaining an ASI LLM Key
+## Running the Agent
 
-1.  Visit the ASI AI website: [https://asi1.ai/](https://asi1.ai/)
-2.  Create an account or log in.
-3.  Navigate to the API section and generate a new API key.
-4.  Add this key to your `.env` file as `ASI_LLM_KEY`.
+Start the agent with:
+
+```bash
+python agent.py
+```
+
+Once running, the agent will display its address. Use this address to interact with it on [Agentverse](https://chat.agentverse.ai).
+
+## Example Queries
+
+- "What's the current status of Bitcoin?"
+- "Analyze Ethereum market sentiment"
+- "How is SOL performing?"
+- "Give me a technical analysis of AVAX"
+
+## Sample Output
+
+```
+ Bitcoin (BTC) Market Overview
+
+ Price & Market Data
+• Current Price: $61,234.56
+• Market Cap: $1.2T
+• 24h Volume: $42.8B
+• 24h Change: -2.34%
+• 7d Change: +5.67%
+• 30d Change: +12.45%
+
+ Sentiment Analysis
+• Score: 0.72/1.0
+• Category: Bullish 
+
+ Market Analysis
+Bitcoin shows strong momentum with a 12.45% gain over the past month...
+```
+
+## Agent Architecture
+
+```mermaid
+graph TD
+    A[User Query] --> B[Token Extraction]
+    B --> C[Fetch Price Data]
+    B --> D[Gather News & Social Data]
+    D --> E[Sentiment Analysis]
+    C --> F[AI Analysis]
+    E --> F
+    F --> G[Generate Response]
+    G --> H[Return Analysis]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style H fill:#9f9,stroke:#333,stroke-width:2px
+```
+
+## Documentation
+
+For detailed documentation, please refer to:
+- [uAgents Documentation](https://fetch.ai/docs/)
+- [Agentverse Platform](https://agentverse.ai)
+- [CoinGecko API](https://www.coingecko.com/en/api/documentation)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This software is for educational and informational purposes only. It should not be considered financial advice. Always conduct your own research before making any investment decisions.
+
+---
+
+<div align="center">
+  Made with ❤️ using <a href="https://fetch.ai/" target="_blank">uAgents</a> and <a href="https://agentverse.ai" target="_blank">Agentverse</a>
+</div>
 
 ## Usage
 
