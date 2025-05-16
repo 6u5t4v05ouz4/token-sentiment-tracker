@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-```markdown
-# Token Sentiment & Price Tracker
-
-(https://chat.agentverse.ai)
-=======
 <div align="center">
 
 # Token Sentiment & Price Tracker
@@ -12,7 +6,6 @@
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![uAgents](https://img.shields.io/badge/uAgents-0.6.0+-orange.svg)
 [![Chat on Agentverse](https://img.shields.io/badge/Chat%20on-Agentverse-8A2BE2)](https://chat.agentverse.ai)
->>>>>>> 2cb0b9c (Update  README)
 
 **Real-time cryptocurrency analysis with sentiment intelligence**
 
