@@ -6,6 +6,9 @@
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![uAgents](https://img.shields.io/badge/uAgents-0.6.0+-orange.svg)
 [![Chat on Agentverse](https://img.shields.io/badge/Chat%20on-Agentverse-8A2BE2)](https://chat.agentverse.ai)
+![Innovation Lab](https://img.shields.io/badge/Innovation%20Lab-3D8BD3)
+
+
 
 **Real-time cryptocurrency analysis with sentiment intelligence**
 
