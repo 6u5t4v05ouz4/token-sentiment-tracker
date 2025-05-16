@@ -1,5 +1,3 @@
-Okay, here's an updated and summarized README in US English, based on the functionalities of the Python script you provided.
-
 ```markdown
 # Token Sentiment & Price Tracker
 
