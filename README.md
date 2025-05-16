@@ -150,8 +150,8 @@ graph TD
     F --> G[Generate Response]
     G --> H[Return Analysis]
     
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style H fill:#9f9,stroke:#333,stroke-width:2px
+    style A stroke:#333,stroke-width:2px
+    style H stroke:#333,stroke-width:2px
 ```
 
 ## Documentation
