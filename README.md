@@ -19,11 +19,11 @@
 A powerful `uagents`-based agent that provides real-time cryptocurrency market analysis by combining price data from CoinGecko with sentiment analysis from multiple sources. The agent offers both AI-powered insights (using ASI LLM) and rule-based fallback analysis.
 
 <div align="center">
-  <img src="https://img.icons8.com/color/96/bitcoin--v1.png" alt="Bitcoin" width="60" />
-  <img src="https://img.icons8.com/color/96/ethereum--v1.png" alt="Ethereum" width="60" />
-  <img src="https://img.icons8.com/color/96/ripple--v1.png" alt="Ripple" width="60" />
-  <img src="https://img.icons8.com/color/96/litecoin--v1.png" alt="Litecoin" width="60" />
-  <img src="https://img.icons8.com/color/96/solana.png" alt="Solana" width="60" />
+  <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.svg" alt="Bitcoin" width="60" />
+  <img src="https://cryptologos.cc/logos/ethereum-eth-logo.svg" alt="Ethereum" width="60" />
+  <img src="https://cryptologos.cc/logos/xrp-xrp-logo.svg" alt="Ripple" width="60" />
+  <img src="https://cryptologos.cc/logos/litecoin-ltc-logo.svg" alt="Litecoin" width="60" />
+  <img src="https://cryptologos.cc/logos/solana-sol-logo.svg" alt="Solana" width="60" />
 </div>
 
 ## Features
